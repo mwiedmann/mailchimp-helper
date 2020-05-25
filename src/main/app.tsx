@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Container, Form, Button } from 'react-bootstrap'
-import { Environment } from './environment'
 import Axios from 'axios'
 
 type IMode = 'tagAndEmails' | 'batch' | 'submitting' | 'done' | 'error'
@@ -20,22 +19,6 @@ export const App = () => {
   const [errors, setErrors] = React.useState<string[]>()
   const [formdata, setFormData] = React.useState<IForm>(defaultFormdata())
   const [batchFinal, setBatchFinal] = React.useState<IBatch>()
-
-  React.useEffect(() => {
-    let errorList = []
-
-    if (!Environment.apiKey) {
-      errorList = [...errorList, 'Missing API Key']
-    }
-    if (!Environment.listId) {
-      errorList = [...errorList, 'Missing ListID']
-    }
-
-    if (errorList.length) {
-      setMode('error')
-      setErrors(errorList)
-    }
-  }, [])
 
   const handleGenerateBatch = (e) => {
     e.preventDefault()

@@ -9,6 +9,7 @@ const startExpress = async () => {
   // Read in the environment vars
   dotenv.config()
 
+  // Make sure we have the required ENV Vars
   if (!process.env.MAILCHIMP_APIKEY) {
     throw new Error('Missing MAILCHIMP_APIKEY from environment')
   }
@@ -16,15 +17,17 @@ const startExpress = async () => {
     throw new Error('Missing MAILCHIMP_LISTID from environment')
   }
 
-  // Create the Express server with middleware
+  // Create the Express server with cors enabled
   const app = express()
   app.use(cors())
 
   // Allow the body of requests to be json
   app.use(bodyParser.json())
 
-  // Connect the routes
+  // Connect the routes.
+  // As this grows, we will move the handlers out into their own module
   app.post('/batch', async (request, response, next) => {
+    // Make sure we have the required fields
     if (!request.body.emails || !request.body.tag) {
       response.status(500).send(`Invalid body. Missing 'emails' or 'tag'`)
       return
